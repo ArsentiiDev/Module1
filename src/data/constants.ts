@@ -1,0 +1,5 @@
+export const CUBE = 'Cube'
+export const TRIANGLE = 'Triangle'
+export const PYRAMID = 'Pyramid'
+export const RIGHT_TRIANGLE = 'RightTriangle'
+export const TETRAHEDRON = 'Tetrahedron'

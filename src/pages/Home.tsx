@@ -1,59 +1,105 @@
 import MessageListItem from '../components/MessageListItem';
 import { useState } from 'react';
-import { Message, getMessages } from '../data/messages';
+import { Message, getMessages, getMessage } from '../data/messages';
+import { CUBE, TRIANGLE, PYRAMID, RIGHT_TRIANGLE, TETRAHEDRON } from '../data/constants';
+
 import {
   IonContent,
   IonHeader,
-  IonList,
   IonPage,
-  IonRefresher,
-  IonRefresherContent,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter
+  IonText,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonLabel,
+  IonSelectOption,
+  IonSelect,
+  IonInput,
+  IonButton,
+  IonSegment,
+  IonSegmentButton
 } from '@ionic/react';
 import './Home.css';
+import ResultList from '../components/ResultList';
+
+type Inputs = {
+  figure: string,
+  side: string
+};
+
+const sides = ['h', 'a', 'b', 'c']
 
 const Home: React.FC = () => {
 
-  const [messages, setMessages] = useState<Message[]>([]);
 
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
+  interface select {
+    value: string
+  }
 
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
+  const [figure, setFigure] = useState<string>();
+  const [isOpen, setIsOpen] = useState<Boolean>(false);
+
+
+  const renderResult = () => {
+    setIsOpen(true)
+  }
+
+  const handleChange = (e: any) => {
+    let value = e.target.value;
+    console.log(value)
+    setFigure(value)
+    setIsOpen(false)
+  }
+
+
 
   return (
     <IonPage id="home-page">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
+          <IonTitle>Модуль</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <IonTitle>Григор'єв Арсентій КН-32</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Завдання</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            Для учеників середньої школи необхідно розробити застосування для
+            вивчення геометрії та планіметрії. Для трьовимірних тіл необхідно
+            розраховувати площину та об‘єм для двовимірних площину та периметр
+            та для тих для яких це можливо радіус вписаної та описаної окружностей.
+            Тривимірні тіла – трикутна піраміда, куб. Двовимірні - прямокутний трикутник.
+            Створити поліморфний контейнер для їх виведення(як мінімум 3 елемента).
+            Результати розрахунків необхідно виводити на екран.
+          </IonCardContent>
+        </IonCard>
+        <IonItem>
+          <IonLabel>Choose figure:</IonLabel>
+          <IonSelect
+            id="select"
+            onIonChange={e => handleChange(e)}
+            value={figure}>
+            <IonSelectOption value={CUBE}>Cube</IonSelectOption>
+            <IonSelectOption value={TETRAHEDRON}>Tetrahedron</IonSelectOption>
+            <IonSelectOption value={RIGHT_TRIANGLE}>Right Triangle</IonSelectOption>
+          </IonSelect>
+        </IonItem>
 
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">
-              Inbox
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <IonButton onClick={renderResult} expand="block">calculate</IonButton>
 
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
+        <ResultList isOpen={isOpen} figure={figure} />
+
       </IonContent>
-    </IonPage>
+    </IonPage >
   );
 };
 
